@@ -1,0 +1,11 @@
+# Sources and workflow fidelity
+
+- [Codex non-interactive execution](https://developers.openai.com/codex/noninteractive): JSONL event stream, completed-turn usage, schemas and resumed sessions. Local CLI inspected: `codex-cli 0.153.4`.
+- [Codex configuration reference](https://developers.openai.com/codex/config-reference): named filesystem/network permission profiles and disabled web access. The local probe verified snapshot writes and Python execution with denied access to task metadata.
+- [Luna model documentation](https://developers.openai.com/api/docs/models/gpt-5.6-luna): medium/xhigh efforts; checked 2026-09-09. Recorded rates are $0.20/M input, $0.02/M cached input, $1.20/M output; cache writes use 1.25× ordinary input. These are comparison estimates, not a statement of the user's invoice.
+- [OpenSpec](https://github.com/Fission-AI/OpenSpec): CLI 1.12.0. The harness uses the package's actual generated Codex skills and validators. Discovery reference checkout commit is saved in `tasks/workflows.lock.json`; npm dependency resolution is saved in `.eval-cache/tooling/package-lock.json`.
+- [Gennady](https://github.com/RubaXa/gennady): CLI 0.9.0-next.4. The harness copies actual package directives and skills. The author-specific `~/Developer/gennady/` prefix in skill links is adapted to the current workspace. Dispatch and question transport are adapted to structured Codex CLI messages; phase protocols and audit instructions remain upstream. The Python test gate is declared through Gennady's anystack plugin.
+
+The local `~/Projects/cloud-ios` branch `ap/sdd-integration` was inspected read-only using `git show`. It contains `ai/directives/sdd`, the SDD skills, a `specs/README.md` portal, scopes and testing/infra specifications. This confirms the portal → scopes → tasks → phase execution/audit structure. Its iOS conventions and internal project data are not copied into public benchmark workspaces. Upstream Gennady is the benchmark reference; this is not a benchmark of the cloud-ios team's customized branch.
+
+The selected 2022/2023 changes have human authors and merged PR provenance. We do not independently assert that no AI tools were used. Their original fixes and test patches are visible only to evaluation preparation/grading, not participant prompts.

@@ -1,0 +1,28 @@
+➤ YN0000: · Yarn 4.13.0
+➤ YN0000: ┌ Resolution step
+➤ YN0085: │ - 7zip-bin@npm:5.2.0, @algolia/abtesting@npm:1.7.0, @algolia/autocomplete-core@npm:1.19.2, @algolia/autocomplete-core@npm:1.19.8, and 1200 more.
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Post-resolution validation
+➤ YN0060: │ peggy is listed by your project with version 5.1.0 (ped1c61), which doesn't satisfy what vite-plugin-peggy-loader requests (^1.2.0 || ^3.0.2 || ^4.0.0).
+➤ YN0060: │ react is listed by your project with version 19.2.4 (pfeaecd), which doesn't satisfy what @react-spring/zdog (via react-spring) and other dependencies request (but they have non-overlapping ranges!).
+➤ YN0060: │ react-dom is listed by your project with version 19.2.4 (p145d5f), which doesn't satisfy what @react-spring/zdog (via react-spring) and other dependencies request (but they have non-overlapping ranges!).
+➤ YN0060: │ vite is listed by your project with version 8.0.8 (p5082ad), which doesn't satisfy what vite-plugin-pwa and other dependencies request (but they have non-overlapping ranges!).
+➤ YN0002: │ @actual-app/components@workspace:packages/component-library [dc3cf] doesn't provide @babel/core (p50edc6), requested by @svgr/babel-plugin-add-jsx-attribute.
+➤ YN0002: │ @actual-app/components@workspace:packages/component-library [dc3cf] doesn't provide eslint (p315b77), requested by eslint-plugin-storybook.
+➤ YN0002: │ @actual-app/components@workspace:packages/component-library doesn't provide @babel/core (p41f118), requested by @svgr/babel-plugin-add-jsx-attribute.
+➤ YN0002: │ @actual-app/components@workspace:packages/component-library doesn't provide eslint (p306d4d), requested by eslint-plugin-storybook.
+➤ YN0002: │ @actual-app/core@workspace:packages/loot-core doesn't provide typescript (pce6062), requested by i18next and other dependencies.
+➤ YN0002: │ @actual-app/web@workspace:packages/desktop-client doesn't provide react-is (p874ff5), requested by recharts.
+➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.
+➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+➤ YN0013: │ 1426 packages were added to the project (+ 163.1 MiB).
+➤ YN0000: └ Completed in 1m 20s
+➤ YN0000: ┌ Link step
+➤ YN0004: │ @parcel/watcher@npm:2.5.1 lists build scripts, but all build scripts have been disabled.
+➤ YN0007: │ esbuild@npm:0.25.10 must be built because it never has been before or the last one failed
+➤ YN0007: │ better-sqlite3@npm:12.9.0 must be built because it never has been before or the last one failed
+➤ YN0007: │ esbuild@npm:0.27.2 must be built because it never has been before or the last one failed
+➤ YN0000: └ Completed in 6s 779ms
+➤ YN0000: · Done with warnings in 1m 27s

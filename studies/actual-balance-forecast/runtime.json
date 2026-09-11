@@ -1,0 +1,16 @@
+{
+  "node": "~/.local/share/pi-node/node-v22.22.2-darwin-arm64/bin/node",
+  "node_version": "v22.22.2",
+  "yarn": "4.13.0",
+  "lock_sha256": "aa5d739347cdbc8bb4dde273ca496224688bf255703053d7f4ae72d6848ae8a7",
+  "lock_unchanged": true,
+  "command": [
+    "~/.local/share/pi-node/node-v22.22.2-darwin-arm64/bin/node",
+    ".yarn/releases/yarn-4.13.0.cjs",
+    "install",
+    "--immutable"
+  ],
+  "returncode": 0,
+  "log": "~/Projects/trash/studies/actual-balance-forecast/sources/install-full.log",
+  "electron_binary": "not installed; browser study"
+}

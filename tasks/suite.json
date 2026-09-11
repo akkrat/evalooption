@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "tasks": [
+    {
+      "id": "boltons-copy-function",
+      "repo": "boltons",
+      "repository": "https://github.com/mahmoud/boltons.git",
+      "complexity": "small",
+      "source_url": "https://github.com/mahmoud/boltons/pull/336",
+      "project": "Boltons is a Python library of reusable utilities. Preserve existing APIs and Python 3 behavior.",
+      "task": "Fix copy_function so copied functions preserve keyword-only argument defaults. For example, copying a function f(x, *, y=2) returning x*y must let the copy return 42 for input 21, just like the original. Preserve existing copying behavior and add regression coverage.",
+      "test_files": [
+        "tests/test_funcutils_fb_py3.py"
+      ],
+      "test_targets": [
+        "tests/test_funcutils_fb_py3.py"
+      ],
+      "source_roots": [
+        "boltons"
+      ],
+      "notes": "PR body contains the solution; public task is manually redacted to retain the reproduction and desired behavior only.",
+      "fix_commit": "c2b04b4cb16410d7bf9ff781c78dee3ca908dc32",
+      "base_commit": "0341ab3d79e6430c0e6a4149df9c92679988a534",
+      "full_test_targets": [
+        "tests"
+      ],
+      "provenance": "Human-authored historical merged change (2022/2023); no claim of independently verified absence of AI assistance."
+    },
+    {
+      "id": "more-itertools-classify-unique",
+      "repo": "more-itertools",
+      "repository": "https://github.com/more-itertools/more-itertools.git",
+      "complexity": "medium",
+      "source_url": "https://github.com/more-itertools/more-itertools/pull/777",
+      "project": "more-itertools is a Python library extending itertools with reusable lazy iteration helpers.",
+      "task": "Add classify_unique(iterable, key=None). Lazily yield a tuple (original element, unique compared with the immediately preceding element, never seen earlier in the input) for every input element. Both flags are true for the first item. An optional key controls comparisons without changing yielded elements. Support hashable and unhashable elements and keys, as existing uniqueness helpers do, including None and empty inputs. Export and document the new public helper and provide typing and tests.",
+      "test_files": [
+        "tests/test_more.py"
+      ],
+      "test_targets": [
+        "tests/test_more.py",
+        "tests/test_recipes.py"
+      ],
+      "source_roots": [
+        "more_itertools"
+      ],
+      "notes": "Task paraphrases accepted API requirements; no implementation, original tests, commit ID, or source URL is given to participants.",
+      "fix_commit": "0841e578490098b21497782f7063f9350164d114",
+      "base_commit": "10b69b34b6619876c835559312a7b5346ccfcd86",
+      "full_test_targets": [
+        "tests"
+      ],
+      "provenance": "Human-authored historical merged change (2022/2023); no claim of independently verified absence of AI assistance."
+    },
+    {
+      "id": "boltons-spooled-io",
+      "repo": "boltons",
+      "repository": "https://github.com/mahmoud/boltons.git",
+      "complexity": "larger",
+      "source_url": "https://github.com/mahmoud/boltons/pull/305",
+      "project": "Boltons is a Python library of reusable utilities. Its spooled byte and text streams keep small files in memory and roll larger files to disk.",
+      "task": "Improve SpooledBytesIO and SpooledStringIO compatibility with io.IOBase. They should satisfy IOBase instance/type checks and support its usual stream operations including writelines. Equality and inequality should avoid loading both entire streams into memory, and restore both original stream positions even when comparison raises. Operations on closed streams should raise ValueError consistently with io streams, including flush, isatty, pos, buf, truncate, next, iter, context entry, read, readline and tell. Preserve existing byte/text and rollover behavior; add regression tests.",
+      "test_files": [
+        "tests/test_ioutils.py"
+      ],
+      "test_targets": [
+        "tests/test_ioutils.py"
+      ],
+      "source_roots": [
+        "boltons"
+      ],
+      "notes": "Larger relative to this starter set: stream hierarchy, resource state, comparison and byte/text variants; not representative of large application features.",
+      "fix_commit": "6505c6b5565275d484e0e3907a471944441f0c57",
+      "base_commit": "9420cfeb3b1eb270fad876d002bf92567e619b0c",
+      "full_test_targets": [
+        "tests"
+      ],
+      "provenance": "Human-authored historical merged change (2022/2023); no claim of independently verified absence of AI assistance."
+    }
+  ]
+}

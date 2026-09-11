@@ -1,0 +1,5 @@
+Add a Balance Forecast report using existing accounts and scheduled transactions. Provide daily/monthly projections and highlight the lowest expected balance. Integrate it into the Reports dashboard and experimental settings, following existing application conventions.
+
+The report should start from posted account balances, include posted activity within the selected range, and project future active scheduled income, expenses, and transfers. Do not invent past occurrences of a schedule. Account and report filters should apply consistently. Transfers between selected accounts should balance across those accounts. Account-less schedules can contribute to an unfiltered overall forecast but cannot be assigned to a selected real account.
+
+Users should be able to select a date range or future preset, switch daily/monthly granularity, inspect the lowest projected balance and its date, and save report settings to the dashboard widget. Daily and monthly views should represent the same underlying projection. Keep the feature behind an experimental setting, preserve the existing reports, and add appropriate tests and user documentation.

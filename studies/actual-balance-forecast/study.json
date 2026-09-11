@@ -1,0 +1,23 @@
+{
+  "id": "actual-balance-forecast",
+  "repository": "https://github.com/actualbudget/actual.git",
+  "source_url": "https://github.com/actualbudget/actual/pull/7310",
+  "base_commit": "2e0342574f9fded0d47113226904d17ba2bdfef1",
+  "fix_commit": "e8d95fdf6baaa03c896e8d11bc1d8dd18fb2f79c",
+  "reference_provenance": "AI-assisted (declared in PR title; not a human-only reference)",
+  "brief": "Add a Balance Forecast report using existing accounts and scheduled transactions. Provide daily/monthly projections and highlight the lowest expected balance. Integrate it into the Reports dashboard and experimental settings, following existing application conventions.",
+  "status": "complete",
+  "model": "gpt-5.6-luna",
+  "user_effort": "medium",
+  "agent_effort": "xhigh",
+  "approaches": [
+    "prompt",
+    "plan",
+    "openspec",
+    "gennady"
+  ],
+  "repeats": 1,
+  "completed_at": "2026-09-10T01:20:02.026087+00:00",
+  "recorded_results": 4,
+  "reset_credit_used": false
+}

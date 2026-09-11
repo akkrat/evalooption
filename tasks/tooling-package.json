@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@fission-ai/openspec": "1.12.0",
+    "gennady": "0.9.0-next.4"
+  }
+}

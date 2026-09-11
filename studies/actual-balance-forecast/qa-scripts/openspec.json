@@ -1,0 +1,44 @@
+[
+  {
+    "from": "name:'Balance forecast',exact:true",
+    "to": "name:'Balance Forecast',exact:true"
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Monthly',exact:true}).waitFor();",
+    "to": "await page.getByRole('button',{name:'Monthly',exact:true}).click();\nawait page.getByRole('combobox',{name:'Forecast range',exact:true}).selectOption('next-year');"
+  },
+  {
+    "from": "const report=page.getByTestId('reports-page');",
+    "to": "const report=page.getByTestId('balance-forecast-report');"
+  },
+  {
+    "from": "await expect(report.getByText(new RegExp('Lowest (Point|Balance).*'+date,'i'))).toBeVisible();",
+    "to": "await expect(report.getByTestId('balance-forecast-lowest').getByText(date,{exact:true})).toBeVisible();"
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Monthly',exact:true}).click();\nawait page.getByRole('button',{name:'Daily',exact:true}).click();",
+    "to": "await page.getByRole('button',{name:'Daily',exact:true}).click();"
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Next 3 months',exact:true}).click();",
+    "to": "await page.getByRole('combobox',{name:'Forecast range',exact:true}).selectOption('next-3-months');"
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Daily',exact:true}).waitFor();",
+    "to": "await expect(page.getByRole('combobox',{name:'Forecast range',exact:true})).toHaveValue('next-3-months');\nawait expect(page.getByTestId('balance-forecast-report')).toContainText('Daily points include');"
+  },
+  {
+    "from": "report.getByText(amount,{exact:true}).first()",
+    "to": "report.getByTestId('balance-forecast-lowest').getByText(amount,{exact:true}).first()"
+  },
+  {
+    "after": "await save('posted-activity');",
+    "additional_unscored_probe": "\n// Additional unscored probe: all candidates default to Daily, so persist non-default Monthly too.\nawait page.getByRole('button',{name:'Monthly',exact:true}).click();\nawait page.getByRole('button',{name:'Save widget',exact:true}).click();\nawait expect(page.getByText('Dashboard widget successfully saved.',{exact:true}).first()).toBeVisible();\nawait page.reload();\nawait expect(page.getByTestId('balance-forecast-report')).toContainText('Monthly points are calendar month-end snapshots.');\nawait assertMinimum('350.00','2017-03-15');\nrecord('additional-nondefault-granularity-persistence','Monthly is non-default and survives save/reload with unchanged 350 minimum on March 15; separate from the seven common checks.');\nawait save('monthly-persisted');",
+    "reason": "Daily is each candidate default; an extra Monthly save/reload discriminates granularity persistence. Original seven checks and expected outcomes unchanged."
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Save widget',exact:true}).click();\nawait page.reload();",
+    "to": "await page.getByRole('button',{name:'Save widget',exact:true}).click();\nawait expect(page.getByText('Dashboard widget successfully saved.',{exact:true}).first()).toBeVisible();\nawait page.reload();",
+    "reason": "Wait for the visible save acknowledgment before reloading."
+  }
+]

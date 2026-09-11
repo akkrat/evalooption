@@ -1,0 +1,22 @@
+[project]
+name = "coding-approach-eval"
+version = "0.1.0"
+description = "Replay historical coding tasks through Codex workflows"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest==8.3.5", "coverage==7.8.0"]
+
+[project.scripts]
+approach-eval = "approach_eval.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["approach_eval*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,49 @@
+[
+  {
+    "from": "name:'Balance forecast',exact:true",
+    "to": "name:'Balance Forecast',exact:true"
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Monthly',exact:true}).waitFor();",
+    "to": "await page.getByRole('button',{name:'Monthly',exact:true}).click();\nawait page.getByRole('button',{name:'Next 30 days',exact:true}).click();\nawait page.getByRole('button',{name:'Next 1 year',exact:true}).click();"
+  },
+  {
+    "from": "const report=page.getByTestId('reports-page');",
+    "to": "const report=page.locator('body');"
+  },
+  {
+    "from": "await expect(report.getByText(amount,{exact:true}).first()).toBeVisible();",
+    "to": "await expect(report.getByText('Lowest projected balance',{exact:true}).locator('..')).toContainText(amount);"
+  },
+  {
+    "from": "await expect(report.getByText(new RegExp('Lowest (Point|Balance).*'+date,'i'))).toBeVisible();",
+    "to": "const formatted={'2017-12-15':'December 15th, 2017','2017-03-15':'March 15th, 2017'}[date];\n await expect(report.getByText('Lowest balance date',{exact:true}).locator('..')).toContainText(formatted);"
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Monthly',exact:true}).click();\nawait page.getByRole('button',{name:'Daily',exact:true}).click();",
+    "to": "await page.getByRole('button',{name:'Daily',exact:true}).click();\nconst dailyColor=await page.getByRole('button',{name:'Daily',exact:true}).evaluate(e=>getComputedStyle(e).backgroundColor);\nconst monthlyColor=await page.getByRole('button',{name:'Monthly',exact:true}).evaluate(e=>getComputedStyle(e).backgroundColor);\nif(dailyColor===monthlyColor)throw new Error('Daily selection has no distinct visible state');"
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Next 3 months',exact:true}).click();",
+    "to": "await page.getByRole('button',{name:'Next 1 year',exact:true}).click();\nawait page.getByRole('button',{name:'Next 3 months',exact:true}).click();"
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Daily',exact:true}).waitFor();",
+    "to": "await page.getByRole('button',{name:'Next 3 months',exact:true}).waitFor();\nawait expect(page.getByRole('button',{name:'Daily',exact:true})).toHaveCSS('background-color',dailyColor);\nawait expect(page.getByRole('button',{name:'Monthly',exact:true})).toHaveCSS('background-color',monthlyColor);"
+  },
+  {
+    "after": "await save('posted-activity');",
+    "additional_unscored_probe": "\n// Additional unscored probe: all candidates default to Daily, so persist non-default Monthly too.\nawait page.getByRole('button',{name:'Monthly',exact:true}).click();\nawait page.getByRole('button',{name:'Save widget',exact:true}).click();\nawait expect(page.getByText('Dashboard widget successfully saved.',{exact:true}).first()).toBeVisible();\nawait page.reload();\nawait expect(page.getByRole('button',{name:'Monthly',exact:true})).toHaveCSS('background-color',dailyColor);\nawait expect(page.getByRole('button',{name:'Daily',exact:true})).toHaveCSS('background-color',monthlyColor);\nawait assertMinimum('350.00','2017-03-15');\nrecord('additional-nondefault-granularity-persistence','Monthly is non-default and survives save/reload with unchanged 350 minimum on March 15; separate from the seven common checks.');\nawait save('monthly-persisted');",
+    "reason": "Daily is each candidate default; an extra Monthly save/reload discriminates granularity persistence. Original seven checks and expected outcomes unchanged."
+  },
+  {
+    "from": "await page.getByRole('button',{name:'Save widget',exact:true}).click();\nawait page.reload();",
+    "to": "await page.getByRole('button',{name:'Save widget',exact:true}).click();\nawait expect(page.getByText('Dashboard widget successfully saved.',{exact:true}).first()).toBeVisible();\nawait page.reload();",
+    "reason": "Wait for the visible save acknowledgment before reloading."
+  },
+  {
+    "from": "const dailyColor=await",
+    "to": "await page.mouse.move(0,0);\nawait page.waitForTimeout(250);\nconst dailyColor=await",
+    "reason": "Attempt 01 compared the hovered selected color with the non-hovered color after reload. Move the pointer away before recording the visible selection style."
+  }
+]

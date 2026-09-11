@@ -1,0 +1,25 @@
+.venv/
+.eval-cache/
+runs/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+
+# Generated evidence is distributed through the verified share archive.
+analysis/
+reports/
+exports/
+studies/**/validation/
+studies/**/preflight/
+studies/**/frozen-engine/
+studies/**/MEASUREMENTS.json
+studies/**/AUDIT.json
+studies/**/COMPARISON.md
+studies/**/QA_REPORT.md
+studies/**/schedule.json
+studies/**/state.json
+studies/**/original-artifacts.json
+studies/**/runtime-observed.json
+.DS_Store
+# Pre-existing workspace configuration, outside this project.
+.mise.toml
