@@ -1,8 +1,12 @@
 # Reporting, original solutions, and sharing
 
-The HTML report is an offline artifact built from saved evidence. Open `reports/comparison/index.html`; it also works through `python3 -m http.server 8000` from the project root. No CDN, external fonts, analytics, model calls, or network requests are required to view or rebuild it.
+A fresh checkout has no HTML report, saved report data, or historical study results. For a new suite, run `python3 -m approach_eval.cli report runs/my-suite` after the trials finish; this generates a Markdown report. The HTML builder currently targets the historical study layout and is not a generic importer for arbitrary suites.
+
+When the required data exists, the HTML report is an offline artifact built from saved evidence. Open `reports/comparison/index.html`; it also works through `python3 -m http.server 8000` from the project root. No CDN, external fonts, analytics, model calls, or network requests are required to view or rebuild it.
 
 ## Rebuild an existing report
+
+Requires a previously generated `reports/comparison/data.json`. Raw artifact links additionally require the matching local result files. No such bundle is distributed with this repository.
 
 ```sh
 python3 reporting/build_report.py --from-data reports/comparison/data.json
@@ -12,7 +16,9 @@ Validate all metric mappings and artifact links with `python3 reporting/validate
 
 The data schema records task and commit provenance, separate initial/continuation phases, original solution measurements, candidate metrics, judged quality and its evidence, exact model prompts and responses, developer-facing exchanges, three-way code diffs, and a searchable artifact index. Missing measurements use `null`, not zero. The HTML renders untrusted text as text; code and dialogue are not executed.
 
-## Generate a comparison from this study's raw results
+## Generate a comparison from the historical study’s raw results
+
+Requires the original library and application run directories, upstream caches, validation outcomes, and completed reference measurements. The commands below are historical maintenance steps, not a fresh-checkout quick start.
 
 ```sh
 .venv/bin/python reporting/export_repositories.py
@@ -24,7 +30,7 @@ The data schema records task and commit provenance, separate initial/continuatio
 
 Reference reviews are post-study model judgments. They use anonymous reviewer workspaces and the same rubric and task context, but are not a new randomized or independently calibrated study. The reference's own historical tests helped define the task, so they are not independent acceptance evidence. The Actual reference is explicitly AI-assisted.
 
-Reference measurement creation refuses to overwrite partial workspaces. Completed measurements and reviews are reused. A interrupted or failed analysis should be inspected and archived before using a new analysis location; never silently overwrite a failed trial to make a report look complete. `build_report.py` currently imports the fixed library suite and Actual Budget study layout; for another study, add an importer into the normalized report schema. The general CLI can already report arbitrary suites in Markdown.
+Reference measurement creation refuses to overwrite partial workspaces. Completed measurements and reviews are reused. An interrupted or failed analysis should be inspected and archived before using a new analysis location; never silently overwrite a failed trial to make a report look complete. `build_report.py` currently imports the fixed library suite and Actual Budget study layout; for another study, add an importer into the normalized report schema. The general CLI can already report arbitrary suites in Markdown.
 
 ## Reading the comparison
 
@@ -37,7 +43,9 @@ Reference measurement creation refuses to overwrite partial workspaces. Complete
 - **Browser evidence** distinguishes the strict original checker from later equivalent-control adjudication. The three implemented app candidates pass the seven common checks, with documented remaining visual defects. A private-import test-suite load failure does not mean a zero-obligation pass.
 - **Dialogues** distinguish prose shown to the simulated developer from harness prompts and worker exchanges. The execution trace includes all saved role/stage calls; raw CLI events remain linked. Continuation prose does not duplicate the original phase.
 
-## Export, verify, restore
+## Optional local export, verify, restore
+
+Archives are local, Git-ignored backups. They are not required for setup and are not published with the repository. Export only when you have generated results to preserve.
 
 ```sh
 python3 reporting/archive_results.py --list
@@ -56,7 +64,7 @@ Dependency trees, browser binaries, Git object databases, caches, generated appl
 
 The verifier checks all file hashes, missing/extra/duplicate entries, unsafe paths and non-regular members. Extraction verifies first, requires a new destination, and uses Python's data extraction filter. It does not execute anything from the archive. Refuse to treat a matching self-contained manifest as proof of authorship: validate the externally supplied archive SHA-256 when authenticity matters.
 
-The archive can be large because it includes raw evidence and repeated evaluation trees. `--list` shows its scope before compression; failed creation leaves a `.partial` file rather than a misleading completed archive. Stop active studies before exporting. Dependencies must be installed separately to execute tests; HTML reconstruction does not require them. Source snapshots have no Git history, but their provenance identifies exact upstream commits. The harness Git repository intentionally contains authored source/configuration/docs, not multi-gigabyte generated evidence. This release also includes `analysis/harness.bundle`: use `git clone analysis/harness.bundle /path/to/new-checkout` to recover its Git history independently of the result trees.
+The archive can be large because it includes raw evidence and repeated evaluation trees. `--list` shows its scope before compression; failed creation leaves a `.partial` file rather than a misleading completed archive. Stop active studies before exporting. Dependencies must be installed separately to execute tests; HTML reconstruction does not require them. Source snapshots have no Git history, but their provenance identifies exact upstream commits. The harness Git repository intentionally contains authored source/configuration/docs, not multi-gigabyte generated evidence. A locally prepared archive may additionally include a Git bundle; that optional file is not supplied by a clean checkout.
 
 ## Extension points and missing dimensions
 

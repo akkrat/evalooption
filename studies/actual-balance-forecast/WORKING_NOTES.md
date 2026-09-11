@@ -1,3 +1,5 @@
+> Historical study material. Saved runs, validation records, dependencies, and resumable sessions are not included in Git. These instructions require that separate study state; use the root README to start a new standalone evaluation.
+
 # Continuation state — 2026-09-10, about 01:47 Moscow
 
 Original matrix is COMPLETED, finalized and audited: `runs/suite/COMPARISON.md`, MEASUREMENTS.json, AUDIT.json. Do not rerun its 12 trials or alter its frozen engine. No reset credit authorized/used.

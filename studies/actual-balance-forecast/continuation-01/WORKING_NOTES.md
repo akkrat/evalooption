@@ -1,3 +1,5 @@
+> Historical study material. Saved runs, validation records, dependencies, and resumable sessions are not included in Git. These instructions require that separate study state; use the root README to start a new standalone evaluation.
+
 FINAL STATUS: COMPLETE. All four continuation results, independent grades/reviews, browser/visual QA, cumulative arithmetic and preservation audit finished. Controllers3077/76567/replays97863/audit23521 all exited successfully. Three workflows completed (prompt8.1 extra min, plan32.8, OpenSpec46.3); Gennady agent_blocked186.0min at prerequisite with no product code. All3 implementations pass7/7browser+Monthlypersistence; all4 zero new regressions/build/types/lintpass. Visualissuesremain (promptclippedcontrols; prompt/OpenSpecmonthlyminimumdotmissing; OpenSpecstaleEnddate). AUDITpassed, originalsources/reportsunchanged, noresetused. SeeCOMPARISON.md,MEASUREMENTS.json,QA_REPORT.md,WORKFLOW_FINDINGS.md,AUDIT.json. Do not rerun or resume this completed continuation without new user direction. Historical working notes below.
 
 # Completed continuation — 2026-09-11

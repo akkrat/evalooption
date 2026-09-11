@@ -15,6 +15,9 @@ def run(*args, cwd=ROOT):
 def main():
     if sys.version_info < (3, 12):
         raise SystemExit("Python 3.12+ is required")
+    if not ROOT.resolve().is_relative_to(Path.home().resolve()):
+        raise SystemExit("Clone evalooption under your home directory (for example ~/Projects/evalooption). "
+                         "Temporary-directory checkouts are unsupported for model isolation.")
     cache = ROOT / ".eval-cache"
     cache.mkdir(exist_ok=True)
     if not (ROOT / ".venv").exists():

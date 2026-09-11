@@ -1,3 +1,5 @@
+> Historical study material. Saved runs, validation records, dependencies, and resumable sessions are not included in Git. These instructions require that separate study state; use the root README to start a new standalone evaluation.
+
 # Remaining exhausted runs
 
 This study resumes three terminal `budget_exhausted` records: two library benchmark arms and the final Gennady calibration pilot. The four exhausted Actual Budget originals were already continued in `../actual-balance-forecast/continuation-01`, so they are not repeated. `agent_blocked` is a distinct outcome and is not automatically retried here.

@@ -1,3 +1,5 @@
+> Historical study material. Saved runs, validation records, dependencies, and resumable sessions are not included in Git. These instructions require that separate study state; use the root README to start a new standalone evaluation.
+
 # Remaining budget-exhausted continuations
 
 Resume the two exhausted library-suite runs and the exhausted final calibration pilot. Actual Budget originals already have terminal continuations and are not repeated. Blocked runs are not selected. Pilot evidence stays labeled calibration.

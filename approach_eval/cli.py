@@ -67,7 +67,8 @@ def main():
         for t in tasks():
             print(t["id"], t["complexity"], t["source_url"])
     elif args.command == "doctor":
-        checks = {"python": PYTHON.exists(), "codex": shutil.which("codex") is not None,
+        checks = {"checkout_under_home": ROOT.resolve().is_relative_to(Path.home().resolve()),
+                  "python": PYTHON.exists(), "codex": shutil.which("codex") is not None,
                   "openspec": (CACHE / "tooling/node_modules/.bin/openspec").exists(),
                   "gennady": (CACHE / "tooling/node_modules/.bin/gennady").exists()}
         for t in tasks():

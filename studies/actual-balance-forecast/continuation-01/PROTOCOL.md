@@ -1,3 +1,5 @@
+> Historical study material. Saved runs, validation records, dependencies, and resumable sessions are not included in Git. These instructions require that separate study state; use the root README to start a new standalone evaluation.
+
 # Additional-budget continuation
 
 The user authorized continuing all four approaches on Actual Budget. This extends the original bounded runs; it is not four fresh trials and does not replace their results.

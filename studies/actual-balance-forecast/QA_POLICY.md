@@ -1,3 +1,5 @@
+> Historical study material. Saved runs, validation records, dependencies, and resumable sessions are not included in Git. These instructions require that separate study state; use the root README to start a new standalone evaluation.
+
 # Browser result adjudication
 
 Written before any application trial result was recorded. The original browser oracle and raw results remain immutable.

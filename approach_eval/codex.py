@@ -109,6 +109,10 @@ class Codex:
         dump(self.schema, SCHEMA)
 
     def call(self, role, cwd, prompt, session=None, stage="", read_only=False, artifact_only=False, _retry=0):
+        if not all(p.resolve().is_relative_to(Path.home().resolve())
+                   for p in (ROOT, Path(cwd), self.run_dir)):
+            raise RuntimeError("Model runs require checkout and run directories under your home directory; "
+                               "the supported Codex CLI does not isolate temporary-directory checkouts reliably.")
         used = sum((t.get("usage") or {}).get("input_tokens", 0)
                    + (t.get("usage") or {}).get("output_tokens", 0) for t in self.turns)
         if used >= self.settings["max_run_tokens"]:
@@ -120,6 +124,8 @@ class Codex:
         label = f"{index:03d}-{role}-{re.sub(r'[^a-zA-Z0-9_-]', '_', stage)}"
         directory = self.run_dir / "turns" / label
         directory.mkdir(parents=True)
+        scratch = (directory / "tmp").resolve()
+        scratch.mkdir()
         (directory / "prompt.txt").write_text(prompt)
         cwd = Path(cwd).resolve()
         node_bin = Path(shutil.which("node") or "/opt/homebrew/bin/node").resolve().parent
@@ -130,7 +136,7 @@ class Codex:
             "PATH": actor_path, "GIT_CONFIG_GLOBAL": "/dev/null", "GIT_CONFIG_NOSYSTEM": "1",
             "GIT_OPTIONAL_LOCKS": "0", "OPENSPEC_TELEMETRY": "0", "DO_NOT_TRACK": "1",
             "OPENSSL_CONF": "/dev/null", "PYTHONDONTWRITEBYTECODE": "1", "PYTHONNOUSERSITE": "1",
-            "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1", "TMPDIR": "/private/tmp",
+            "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1", "TMPDIR": str(scratch),
             "XDG_CONFIG_HOME": str(cwd / ".runtime-config"),
             "XDG_CACHE_HOME": str(cwd / ".runtime-cache"),
         }
@@ -174,7 +180,7 @@ class Codex:
                 str(Path(shutil.which("node") or "/opt/homebrew/bin/node").resolve().parent.parent): "read",
                 str(git_bin.parent.parent): "read",
                 str(PYTHON.resolve().parent.parent): "read",
-                "/private/tmp": "write",
+                str(scratch): "write",
             }, "network": {"enabled": False}}},
             "developer_instructions": ("You are simulating the human developer. Never use tools. "
                                        "Only return the requested JSON." if role == "user" else PROTOCOL)

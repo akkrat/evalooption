@@ -51,6 +51,8 @@ The CLI can report a usage-limit error while account settings still show remaini
 
 The evaluator exports another clean base tree and replays package source changes. It first runs original baseline tests, then installs the original changed test files and runs hidden acceptance tests. Candidate test edits cannot remove these assertions. A separate candidate tree runs the agent's own tests and measures coverage. Generated code runs in a separate Seatbelt sandbox without network or hidden evaluator-file contents, and with an environment whitelist. Filesystem metadata remains readable because Python and pytest need ancestor-path metadata. This starter adapter is deliberately for Python package-source tasks; packaging, dependency, build, database, UI, and distributed-system tasks require a task-specific evaluator and environment.
 
+The standalone runner also protects evaluator metadata when its checkout is outside the home directory. Each actor receives its own temporary directory instead of write access to the shared system temporary directory. Live probing of the supported CLI also found temporary-directory checkouts insufficiently isolated, so model runs require the checkout to be under the home directory. These portability fixes apply to new runs; historical measurements retain their frozen engine versions.
+
 The test suite checks token accounting, process timeout cleanup, literal filesystem permission paths, no-future-history snapshots, JUnit outcome distinctions, and the actual historical fail-to-pass fixtures.
 
 ## Limits and follow-on experiments

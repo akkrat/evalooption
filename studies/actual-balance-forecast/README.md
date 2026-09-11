@@ -1,10 +1,12 @@
+> Historical study material. Saved runs, validation records, dependencies, and resumable sessions are not included in Git. These instructions require that separate study state; use the root README to start a new standalone evaluation.
+
 # Actual Budget Balance Forecast comparison
 
 This additional four-approach study replays [Actual Budget PR #7310](https://github.com/actualbudget/actual/pull/7310). The PR explicitly declares AI assistance; it is **not a human-only reference**. Results remain separate from the completed 3-task library matrix in `../../runs/suite/COMPARISON.md`.
 
 ## Completed results
 
-All four trials, grading, quality dispositions, browser replays and the final audit are complete. Read the [comparison](COMPARISON.md), [browser/visual evidence](QA_REPORT.md), [measurements](MEASUREMENTS.json) and [audit](AUDIT.json). Prompt, plan and OpenSpec pass seven common browser obligations after adapting controls; Gennady submitted no implementation. All workflows reached a predeclared bound. These are bounded results, not a general approach ranking.
+All four trials, grading, quality dispositions, browser replays and the final audit are complete. Read the comparison (local generated evidence), browser/visual evidence (local generated evidence), measurements (local generated evidence) and audit (local generated evidence). Prompt, plan and OpenSpec pass seven common browser obligations after adapting controls; Gennady submitted no implementation. All workflows reached a predeclared bound. These are bounded results, not a general approach ranking.
 
 ## Protocol
 

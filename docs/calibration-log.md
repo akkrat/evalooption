@@ -1,6 +1,6 @@
 # Harness calibration
 
-These attempts are engineering calibration, not independent benchmark repetitions. All raw directories remain in `runs/`. The accepted pilot and subsequent full matrix use a frozen code/configuration fingerprint. The suite must not combine results from different fingerprints.
+These attempts are engineering calibration, not independent benchmark repetitions. Raw directories were retained locally under `runs/`; they are not included in Git. The accepted pilot and subsequent full matrix use a frozen code/configuration fingerprint. The suite must not combine results from different fingerprints.
 
 | Attempt | Finding and action |
 |---|---|

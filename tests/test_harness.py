@@ -111,9 +111,20 @@ def test_deleting_candidate_tests_cannot_pass_hidden_grading(tmp_path, monkeypat
     assert result["hidden_counts"]["failed"] == 1
 
 
-def test_grader_sandbox_denies_hidden_metadata_and_network(tmp_path):
+@pytest.mark.parametrize("relocated", [False, True])
+def test_grader_sandbox_denies_hidden_metadata_and_network(tmp_path, monkeypatch, relocated):
+    from approach_eval import grading
     from approach_eval.grading import sandbox_test_command
     from approach_eval.core import ROOT, PYTHON
+    hidden = ROOT / "tasks/suite.json"
+    if relocated:
+        evaluator = tmp_path / "evaluator"
+        evaluator.mkdir()
+        hidden = evaluator / "private.json"
+        hidden.write_text("evaluator-only metadata")
+        monkeypatch.setattr(grading, "ROOT", evaluator)
+    workspace = tmp_path / "candidate"
+    workspace.mkdir()
     source = """import pathlib, socket
 try:
     pathlib.Path(HIDDEN).read_text()
@@ -122,14 +133,20 @@ except PermissionError:
 else:
     raise AssertionError('hidden metadata was readable')
 try:
+    pathlib.Path(HIDDEN).write_text('corrupted')
+except PermissionError:
+    pass
+else:
+    raise AssertionError('hidden metadata was writable')
+try:
     s = socket.socket(); s.bind(('127.0.0.1', 0))
 except PermissionError:
     pass
 else:
     raise AssertionError('network binding was allowed')
 print('ISOLATED')
-""".replace("HIDDEN", repr(str(ROOT / "tasks/suite.json")))
-    result = command(sandbox_test_command([PYTHON, "-c", source], tmp_path, tmp_path), tmp_path)
+""".replace("HIDDEN", repr(str(hidden)))
+    result = command(sandbox_test_command([PYTHON, "-c", source], workspace, workspace), workspace)
     assert result["returncode"] == 0, result["stderr"]
     assert "ISOLATED" in result["stdout"]
 
@@ -189,6 +206,8 @@ def test_recovery_preserves_base_diff_and_original_artifacts(tmp_path):
 def test_usage_limit_retry_resumes_same_luna_session_and_keeps_partial_cost(tmp_path, monkeypatch):
     from approach_eval import codex
     from approach_eval.core import config
+    monkeypatch.setattr(codex, "ROOT", tmp_path)
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: tmp_path))
     sid = "11111111-1111-1111-1111-111111111111"
     commands = []
     def fake_command(args, cwd, timeout, prompt, env):
@@ -214,3 +233,20 @@ def test_usage_limit_retry_resumes_same_luna_session_and_keeps_partial_cost(tmp_
     assert all(c[c.index("--model") + 1] == "gpt-5.6-luna" for c in commands)
     assert client.turns[0]["recovered"] and client.turns[0]["usage_is_partial"]
     assert sum(t["usage"]["input_tokens"] for t in client.turns) == 25
+
+
+@pytest.mark.parametrize("outside", ["checkout", "workspace", "transcript"])
+def test_model_call_rejects_paths_outside_home_before_execution(tmp_path, monkeypatch, outside):
+    from approach_eval import codex
+    from approach_eval.core import config
+    home = tmp_path / "home"
+    paths = {name: home / name for name in ("checkout", "workspace", "transcript")}
+    paths[outside] = tmp_path / "outside"
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: home))
+    monkeypatch.setattr(codex, "ROOT", paths["checkout"])
+    def forbidden(*args, **kwargs):
+        pytest.fail("Unsupported checkout must not launch a model call")
+    monkeypatch.setattr(codex, "command", forbidden)
+    client = codex.Codex(paths["transcript"], config())
+    with pytest.raises(RuntimeError, match="under your home directory"):
+        client.call("agent", paths["workspace"], "Do the task")

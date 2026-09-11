@@ -9,7 +9,7 @@ import shutil
 import sys
 import xml.etree.ElementTree as ET
 
-from .core import CACHE, PYTHON, command, dump, git, snapshot
+from .core import ROOT, CACHE, PYTHON, command, dump, git, snapshot
 
 
 def sandbox_test_command(args, tree, output):
@@ -22,9 +22,17 @@ def sandbox_test_command(args, tree, output):
     quote = lambda p: json.dumps(str(p))
     read_exceptions = " ".join("(require-not (subpath " + quote(p) + "))" for p in readable)
     write_exceptions = " ".join("(require-not (subpath " + quote(p) + "))" for p in writable)
-    profile = ("(version 1) (allow default) (deny network*) "
-        "(deny file-read-data (require-all (subpath " + quote(Path.home()) + ") " + read_exceptions + ")) "
-        "(deny file-write* (require-all " + write_exceptions + "))")
+    # The checkout may live outside HOME (for example, in /private/tmp).
+    protected = {Path.home().resolve(), ROOT.resolve()}
+    read_rules = " ".join(
+        "(deny file-read-data (require-all (subpath " + quote(p) + ") " + read_exceptions + "))"
+        for p in sorted(protected))
+    repository_write_exceptions = " ".join(
+        "(require-not (subpath " + quote(p) + "))" for p in (tree.resolve(), output.resolve()))
+    profile = ("(version 1) (allow default) (deny network*) " + read_rules + " "
+        "(deny file-write* (require-all " + write_exceptions + ")) "
+        "(deny file-write* (require-all (subpath " + quote(ROOT.resolve()) + ") "
+        + repository_write_exceptions + "))")
     return ["/usr/bin/sandbox-exec", "-p", profile, *args]
 
 
