@@ -14,6 +14,7 @@ studies/**/preflight/
 studies/**/frozen-engine/
 studies/**/MEASUREMENTS.json
 studies/**/AUDIT.json
+studies/**/RESUME_AUDIT.json
 studies/**/COMPARISON.md
 studies/**/QA_REPORT.md
 studies/**/schedule.json

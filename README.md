@@ -141,3 +141,9 @@ Prepare a task brief describing the problem and desired behavior, removing imple
 ```
 
 The importer clones the repository into evaluator storage, resolves immutable commits, and registers the task only after its hidden tests distinguish base from completed code. A new pilot is required after changing the suite. This adapter currently supports Python package-source tasks with pytest-compatible tests. Use `--full-test-target` for projects with a different test layout.
+
+## Continuing exhausted runs
+
+The remaining library continuations are documented in [the continuation study](studies/library-continuation-01/README.md). It resumes the original spooled-I/O prompt session and the two suspended Gennady audit chains, keeping the calibration pilot separate from benchmark results. Each receives additional bounded budget; terminal original records remain unchanged. Actual Budget's already-completed continuation is not repeated.
+
+After the runner and reviews finish, `studies/library-continuation-01/finish.py` publishes incremental/cumulative measurements. The HTML builder then imports these follow-ups automatically. Select **After continuation** for the updated library benchmark, or the explicitly labeled calibration phases to inspect the pilot.

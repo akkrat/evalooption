@@ -12,8 +12,8 @@ def validate(root=ROOT):
     errors=[]
     def check(value,message):
         if not value:errors.append(message)
-    check(len(data['runs'])==20,'Expected 20 recorded run phases')
-    check(len({r['id'] for r in data['runs']})==20,'Duplicate run IDs')
+    check(len(data['runs'])>=20,'Expected at least the 20 original recorded run phases')
+    check(len({r['id'] for r in data['runs']})==len(data['runs']),'Duplicate run IDs')
     check(len(data['references'])==4,'Expected four original solutions')
     for source in data['sources']:
         check(hashlib.sha256((root/source['path']).read_bytes()).hexdigest()==source['sha256'],'Input changed: '+source['path'])
@@ -25,11 +25,12 @@ def validate(root=ROOT):
         check(cov['total'] is not None and not cov['unmapped'],r.get('id',r['task'])+': missing coverage mapping')
         expected=100*cov['covered']/cov['total'] if cov['total'] else None
         check(cov['percent']==expected,r.get('id',r['task'])+': inconsistent coverage ratio')
-        check(bool(r['quality']),r.get('id',r['task'])+': missing quality review')
+        check(bool(r['quality']) or r.get('phase')=='calibration-initial',r.get('id',r['task'])+': missing quality review')
     for r in data['runs']:
-        if r['phase']=='continuation':
-            rows=json.loads((root/'studies/actual-balance-forecast/continuation-01/MEASUREMENTS.json').read_text())
-            m=next(x for x in rows if x['approach']==r['approach'])
+        if r['phase'].endswith('continuation'):
+            source='studies/actual-balance-forecast/continuation-01/MEASUREMENTS.json' if r['task']=='actual-balance-forecast' else 'studies/library-continuation-01/MEASUREMENTS.json'
+            rows=json.loads((root/source).read_text())
+            m=next(x for x in rows if x['approach']==r['approach'] and x.get('task',r['task'])==r['task'])
             for key,source in [('minutes','cumulative_workflow_minutes'),('human_minutes','cumulative_human_minutes'),('cost','cumulative_actor_api_equivalent_usd'),('words','cumulative_user_words')]:
                 check(r[key]==m[source],r['id']+': cumulative '+key+' mismatch')
         for f in r['code']:

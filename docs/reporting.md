@@ -61,3 +61,7 @@ The archive can be large because it includes raw evidence and repeated evaluatio
 ## Extension points and missing dimensions
 
 The schema preserves evidence rather than collapsing it into a single winner score. Further studies should add repeated randomized trials, independent human review, mutation testing, branch/path coverage, realistic performance datasets, actual human interaction timing, delayed maintenance tasks, and adversarial or accessibility checks. Those dimensions are currently unmeasured, not silently treated as satisfactory. Repeated tasks, larger samples and reviewed task briefs are needed before drawing general conclusions about a workflow.
+
+## Additional library continuations
+
+When `studies/library-continuation-01/MEASUREMENTS.json` exists, the HTML imports the two benchmark continuations plus the original and continued calibration pilot. For a library continuation, unresumed approaches carry their original measurements and an explicit label. The pilot is available only through its separate calibration phase choices. Do not average it into the benchmark or interpret carried-forward arms as having received the new budget. The first application and library evidence archives remain historical snapshots; create a new export filename for updated results.

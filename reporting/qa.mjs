@@ -17,12 +17,14 @@ const data=JSON.parse(await fs.readFile(path.join(path.dirname(reportPath),'data
 let checked=0;
 for(const task of data.tasks){
  await page.selectOption('#task',task.id);
- for(const phase of task.id==='actual-balance-forecast'?['initial','continuation']:['initial']){
-  if(task.id==='actual-balance-forecast')await page.selectOption('#phase',phase);
-  if(await page.locator('#outcomes tbody tr').count()!==4)throw Error('Missing approach rows');
-  for(const approach of ['prompt','plan','openspec','gennady']){
+ for(const phase of [...new Set(data.runs.filter(r=>r.task===task.id).map(r=>r.phase))]){
+  if(await page.locator('#phase').isEnabled())await page.selectOption('#phase',phase);
+  const expected=phase.startsWith('calibration')?1:4;
+  if(await page.locator('#outcomes tbody tr').count()!==expected)throw Error('Missing approach rows');
+  const approaches=await page.locator('#approach option').evaluateAll(nodes=>nodes.map(n=>n.value));
+  for(const approach of approaches){
    await page.selectOption('#approach',approach);
-   const r=data.runs.find(x=>x.task===task.id&&x.phase===phase&&x.approach===approach);
+   const r=data.runs.find(x=>x.task===task.id&&x.phase===phase&&x.approach===approach)||data.runs.find(x=>x.task===task.id&&x.phase==='initial'&&x.approach===approach);
    if(await page.locator('#file option').count()!==r.code.length)throw Error('Code file count mismatch');
    await page.selectOption('#diff-mode','cross');
    await page.selectOption('#diff-mode','parallel');

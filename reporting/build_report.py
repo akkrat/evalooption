@@ -96,7 +96,7 @@ def test_counts(g):
 def load_run(directory, task, phase, measured=None):
     r = read(directory/'result.json'); g = r.get('grade') or {}; m = measured or r
     app = task['id'] == 'actual-balance-forecast'
-    cont = phase == 'continuation'
+    cont = phase.endswith('continuation')
     post = read(directory/'post-metrics.json', {})
     review = read(directory/('quality-review/result.json' if app else 'context-review/result.json'), {})
     rubric = review if app else review.get('rubric', {})
@@ -187,6 +187,37 @@ def collect():
                            'time':'Library workflow = recorded implementation + simulated-user seconds. Application workflow excludes setup and grading. Continuation values are cumulative; extra time shown separately.'}}
 
 
+def append_budget_continuations(data):
+    """Import optional follow-ups; calibration remains an explicitly separate phase."""
+    study=ROOT/'studies/library-continuation-01'
+    measurements=read(study/'MEASUREMENTS.json')
+    if not measurements:return data
+    for m in measurements:
+        task=next(t for t in data['tasks'] if t['id']==m['task'])
+        for ancestor in m.get('source_lineage',[]):data['artifacts']+=artifacts(ROOT/ancestor)
+        reference=ROOT/'analysis/references'/task['id']/'workspace'
+        tracked=set(git(reference,'ls-files').splitlines())
+        runs=[(ROOT/m['directory'],'calibration-continuation' if m['kind']=='calibration' else 'continuation',m)]
+        if m['kind']=='calibration':runs.insert(0,(ROOT/m['source'],'calibration-initial',None))
+        for directory,phase,metrics in runs:
+            row=load_run(directory,task,phase,metrics)
+            row['continuation_product_changes']=m.get('product_files_changed_during_continuation',[]);row['cohort']=m['kind'];row['source_lineage']=m.get('source_lineage',[]);row['audit']=rel(study/'AUDIT.json')
+            tree=directory/'workspace';files=[]
+            for name in sorted(set(code_files(changed(reference))+code_files(changed(tree)))):
+                a=text_file(reference/name);b=text_file(tree/name)
+                base=git(reference,'show','HEAD:'+name) if name in tracked else ''
+                files.append({'name':name,'same':a==b,'reference_diff':diff(base,a,'before/'+name,'reference/'+name),
+                    'candidate_diff':diff(base,b,'before/'+name,'candidate/'+name),'comparison_diff':diff(a,b,'reference/'+name,'candidate/'+name),
+                    'reference_file':rel(reference/name) if (reference/name).is_file() else None,
+                    'candidate_file':rel(tree/name) if (tree/name).is_file() else None})
+            row['code']=files;data['runs'].append(row)
+            data['artifacts']+=artifacts(directory)
+    data['artifacts']+=artifacts(study)
+    data['artifacts']=list({x['path']:x for x in data['artifacts']}.values())
+    p=study/'MEASUREMENTS.json';data['sources'].append({'path':rel(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+    return data
+
+
 def render(data, output):
     output.mkdir(parents=True, exist_ok=True)
     (output/'data.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
@@ -203,7 +234,7 @@ def main():
     parser.add_argument('--from-data',type=Path,help='Rebuild offline without Git, tests, models or absolute host paths')
     parser.add_argument('--output',type=Path,default=ROOT/'reports/comparison')
     args=parser.parse_args()
-    data=read(args.from_data) if args.from_data else collect()
+    data=read(args.from_data) if args.from_data else append_budget_continuations(collect())
     print(render(data,args.output.resolve()))
 
 
